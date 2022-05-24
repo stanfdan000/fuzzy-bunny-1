@@ -1,5 +1,5 @@
 import { checkAuth, deleteBunny, getFamilies, logout } from '../fetch-utils.js';
-import { renderFamily } from './render-function.js';
+import {} from './render-function.js';
 
 checkAuth();
 
@@ -13,23 +13,30 @@ logoutButton.addEventListener('click', () => {
 async function displayFamilies() {
     familiesEl.textContent = '';
     const families = await getFamilies();
+    console.log(families);
     for (let family of families) {
-        const siblings = renderFamily(family);
+        const familyEl = document.createElement('div');
+        familyEl.classList.add('family');
+        const nameEl = document.createElement('h3');
+        nameEl.textContent = family.name;
+        const bunniesEl = document.createElement('div');
+        bunniesEl.classList.add('bunnies');
 
-        const ul = document.createElement('ul');
+        
         for (let bunny of family.fuzzy_bunnies) {
             console.log(bunny);
-            const li = document.createElement('li');
-            li.textContent = `${bunny.family_id}: ${bunny.name}`;
-            li.addEventListener('click', async () => {
+            const bunnyEl = document.createElement('div');
+            bunnyEl.textContent = bunny.name;
+            bunnyEl.addEventListener('click', async () => {
                 await deleteBunny(bunny.id);
-                await displayFamilies();
+                displayFamilies();
                 
             });
-            ul.append(li);
+            
+            bunniesEl.append(bunnyEl);
         }
-        siblings.append(ul);
-        familiesEl.append(siblings);
+        familyEl.append(bunniesEl, nameEl);
+        familiesEl.append(familyEl);
     }
     
 }

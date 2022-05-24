@@ -8,13 +8,12 @@ export function getUser() {
 }
 
 export async function getFamilies() {
-    const response = await client
-        .from('loving_families')
-        .select('*, fuzzy_bunnies (*)');
+    const response = await client.from('loving_families').select('*, fuzzy_bunnies(*)');
         
     // fetch all families and their bunnies
     
-    return response;
+    return checkError(response);
+    
 }
 
 export async function deleteBunny(id) {
